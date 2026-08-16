@@ -5,16 +5,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.note_taking.notes.domain.Note
 import com.example.note_taking.notes.presentation.composables.NoteListItem
-import java.util.Date
+import java.time.Instant
+
 
 @Preview
 @Composable
 fun NoteListItemPreview(){
     val note = Note(
         id = "1",
-        title = "Title",
+        title = "Title 1",
         content = "Content",
-        createdAt = Date()
+        isFavorite = false,
+        createdAt = Instant.now(),
     )
 
     MaterialTheme(
@@ -22,7 +24,8 @@ fun NoteListItemPreview(){
     ) {
         NoteListItem(
             note = note,
-            onClick = {}
+            onNoteFavoriteClick = {},
+            onClick = {},
         )
     }
 }

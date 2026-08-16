@@ -39,7 +39,7 @@ fun NoteListScreenRoot(
                 is NoteListAction.OnNoteClick -> onNoteClick(action.id)
                 else -> Unit
             }
-            viewModel.OnAction(action)
+            viewModel.onAction(action)
         },
 
     )
@@ -94,7 +94,10 @@ fun NoteListScreen(
                             onAction(NoteListAction.OnNoteClick(noteId))
                         },
                         modifier = Modifier.fillMaxSize(),
-                        scrollState = lazyGridState
+                        scrollState = lazyGridState,
+                            onNoteFavoriteClick = { noteId ->
+                                onAction(NoteListAction.OnNoteFavoriteClick(noteId))
+                            }
                     )
                     state.errorMessage !== null ->{
                         Text(
@@ -110,7 +113,10 @@ fun NoteListScreen(
                                 onAction(NoteListAction.OnNoteClick(noteId))
                             },
                             modifier = Modifier.fillMaxSize(),
-                            scrollState = lazyGridState
+                            scrollState = lazyGridState,
+                            onNoteFavoriteClick = { noteId ->
+                                onAction(NoteListAction.OnNoteFavoriteClick(noteId))
+                            }
                         )
                     }
                 }

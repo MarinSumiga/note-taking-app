@@ -1,6 +1,6 @@
 package com.example.note_taking.notes.presentation.composables
 
-import android.R
+import android.R.attr.onClick
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -11,11 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.note_taking.notes.domain.Note
+import com.example.note_taking.notes.domain.notes
+import com.example.note_taking.notes.presentation.note_list.NoteListAction
 
 @Composable
 fun NoteList(
     notes: List<Note>,
     onNoteClick: (String) -> Unit,
+    onNoteFavoriteClick: (String) -> Unit,
     modifier : Modifier = Modifier,
     scrollState : LazyGridState = rememberLazyGridState()
 ){
@@ -32,6 +35,7 @@ fun NoteList(
         ){
             NoteListItem(
                 note = it,
+                onNoteFavoriteClick = onNoteFavoriteClick,
                 onClick = {onNoteClick(it.id)}
             )
         }

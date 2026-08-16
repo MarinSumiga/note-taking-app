@@ -1,13 +1,14 @@
 package com.example.note_taking.notes.domain
 
-import java.util.Date
+import java.time.Instant
 
 
 data class Note(
     val id: String,
     val title: String,
     val content: String,
-    val createdAt: Date
+    val createdAt: Instant,
+    val isFavorite: Boolean,
 )
 
 
@@ -16,6 +17,7 @@ val notes = (1..19).map {
         id = it.toString(),
         title = "Title $it",
         content = "Content $it",
-        createdAt = Date()
+        isFavorite = false,
+        createdAt = Instant.now()
     )
 }
