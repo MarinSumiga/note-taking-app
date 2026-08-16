@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">note-taking</string>
+    <string name="search_query">Search notes..</string>
+
+</resources>
