@@ -7,7 +7,7 @@ import java.time.Instant
 
 @Document(collection = "notes")
 data class Note(
-    @Id val id: ObjectId? = null,
+    @Id val id: ObjectId? = ObjectId.get(),
     val title: String,
     val content: String,
     val createdAt: Instant = Instant.now(),
