@@ -10,6 +10,6 @@ val appModule = module{
         NoteListViewModel()
     }
     viewModel {
-        NoteDetailViewModel()
+        NoteDetailViewModel(noteId = it.get())
     }
 }

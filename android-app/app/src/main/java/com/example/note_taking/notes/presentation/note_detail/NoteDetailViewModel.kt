@@ -6,11 +6,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class NoteDetailViewModel : ViewModel() {
+class NoteDetailViewModel(
+    private val noteId:String,
+) : ViewModel() {
     private val _state = MutableStateFlow(NoteDetailState())
     val state = _state.asStateFlow()
 
-    fun OnAction(action: NoteDetailAction){
+    init {
+        loadNote()
+    }
+
+    fun onAction(action: NoteDetailAction){
         when(action){
             is NoteDetailAction.OnTitleChange -> {
 
@@ -22,12 +28,9 @@ class NoteDetailViewModel : ViewModel() {
             }
         }
     }
-    fun loadNote(
-        noteId: String
-    ){
-        val note = notes.firstOrNull{note ->
-            note.id == noteId
-        }
+    private fun loadNote(){
+        val note = notes.firstOrNull{ it.id == noteId }
+
         _state.update { state ->
             if(note == null){
                 state.copy(

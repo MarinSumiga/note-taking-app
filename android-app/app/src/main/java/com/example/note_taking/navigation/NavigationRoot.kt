@@ -20,7 +20,7 @@ fun NavigationRoot(
         backStack.removeLastOrNull()
     }
     val onNoteClick: (String) -> Unit = {
-        backStack.add(NoteDetailScreenRoute(noteId = it))
+        backStack.addLast(NoteDetailScreenRoute(noteId = it))
     }
 
     NavDisplay(

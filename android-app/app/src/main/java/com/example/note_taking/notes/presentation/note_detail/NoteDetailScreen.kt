@@ -17,28 +17,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun NoteDetailScreenRoot(
-    viewModel : NoteDetailViewModel = koinViewModel(),
     noteId: String,
+    viewModel : NoteDetailViewModel = koinViewModel {
+        parametersOf(noteId)
+    },
     onBackClick : () -> Unit,
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(noteId) {
-        viewModel.loadNote(noteId)
-    }
 
     NoteDetailScreen(
         state = state,
         onAction = { action ->
-            viewModel.OnAction (action)
+            viewModel.onAction (action)
         },
         onBackClick = onBackClick
     )
