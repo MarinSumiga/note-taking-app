@@ -1,0 +1,11 @@
+services:
+  mongodb:
+    image: mongo:8.0
+    container_name: notes-mongodb
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - notes_mongodb_data:/data/db
+
+volumes:
+  notes_mongodb_data:
