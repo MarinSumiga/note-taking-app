@@ -1,4 +1,4 @@
-package com.example.note_taking.notes.data.dto
+package com.example.note_taking.notes.data.remote
 
 import kotlinx.serialization.Serializable
 

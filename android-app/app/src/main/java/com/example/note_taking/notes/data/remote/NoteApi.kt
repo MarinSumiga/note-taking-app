@@ -1,7 +1,5 @@
-package com.example.note_taking.notes.data.network
+package com.example.note_taking.notes.data.remote
 
-import com.example.note_taking.notes.data.dto.CreateNoteRequestDto
-import com.example.note_taking.notes.data.dto.NoteDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

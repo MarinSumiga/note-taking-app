@@ -1,7 +1,7 @@
 package com.example.note_taking.di
 
-import com.example.note_taking.notes.data.network.NoteApi
-import com.example.note_taking.notes.data.network.createHttpClient
+import com.example.note_taking.notes.data.remote.NoteApi
+import com.example.note_taking.notes.data.remote.createHttpClient
 import com.example.note_taking.notes.data.repository.NoteRepositoryImpl
 import com.example.note_taking.notes.domain.NoteRepository
 import com.example.note_taking.notes.presentation.note_editor.NoteEditorViewModel

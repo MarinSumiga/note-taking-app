@@ -1,5 +1,6 @@
 package com.example.note_taking.notes.presentation.note_editor
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,10 +34,21 @@ fun NoteEditorScreenRoot(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    LaunchedEffect(viewModel) {
+        viewModel.effects.collect{ effect ->
+            when(effect){
+                NoteEditorEffect.NavigateBack -> onBackClick()
+            }
+        }
+    }
+
+    BackHandler {
+        viewModel.onAction(NoteEditorAction.OnBackClick)
+    }
+
     NoteEditorScreen(
         state = state,
-        onAction = viewModel::onAction,
-        onBackClick = onBackClick
+        onAction = viewModel::onAction
     )
 }
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +56,6 @@ fun NoteEditorScreenRoot(
 fun NoteEditorScreen(
     state: NoteEditorState,
     onAction: (NoteEditorAction) -> Unit,
-    onBackClick: ()-> Unit
 ){
 
     Scaffold(
@@ -52,7 +64,9 @@ fun NoteEditorScreen(
             NoteTopAppBar(
                 topAppBarTitle = state.noteTitle,
                 navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
-                onBackClick = onBackClick,
+                onBackClick = {
+                    onAction(NoteEditorAction.OnBackClick)
+                },
                 onTitleChange = {
                     onAction(NoteEditorAction.OnTitleChange(it))
                 },
@@ -61,6 +75,7 @@ fun NoteEditorScreen(
                 onActionsIconClick = {
                     onAction(NoteEditorAction.OnSaveClick)
                 },
+                isSaveEnabled = state.hasUnsavedChanges && !state.isSaving
             )
         }
     ) {innerPadding->

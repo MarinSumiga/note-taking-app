@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -31,8 +32,8 @@ fun NoteListScreenRoot(
     onNoteCreateClick: () -> Unit
 ){
     val viewModel: NoteListViewModel = koinViewModel()
-
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val lazyGridState = rememberLazyGridState()
 
     LaunchedEffect(Unit ) {
         viewModel.onAction(NoteListAction.OnRefresh)
@@ -42,23 +43,20 @@ fun NoteListScreenRoot(
         state = state,
         onAction = viewModel::onAction,
         onNoteClick = onNoteClick,
-        onNoteCreateClick = onNoteCreateClick
+        onNoteCreateClick = onNoteCreateClick,
+        lazyGridState = lazyGridState
     )
 }
 
 @Composable
 fun NoteListScreen(
     state: NoteListState,
+    lazyGridState: LazyGridState,
     onAction: (NoteListAction) -> Unit,
     onNoteClick: (String) -> Unit,
     onNoteCreateClick: () -> Unit
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
-    val lazyGridState = rememberLazyGridState()
-
-    LaunchedEffect(key1 = state.notes) {
-        lazyGridState.animateScrollToItem(0)
-    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
