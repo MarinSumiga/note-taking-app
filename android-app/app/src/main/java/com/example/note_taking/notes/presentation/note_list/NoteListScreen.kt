@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.note_taking.notes.presentation.note_list.components.NoteList
 import com.example.note_taking.notes.presentation.note_list.components.NoteListFAB
 import com.example.note_taking.notes.presentation.note_list.components.NoteSearchBar
@@ -26,10 +27,11 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun NoteListScreenRoot(
-    viewModel: NoteListViewModel = koinViewModel(),
     onNoteClick: (String) -> Unit,
     onNoteCreateClick: () -> Unit
 ){
+    val viewModel: NoteListViewModel = koinViewModel()
+
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit ) {

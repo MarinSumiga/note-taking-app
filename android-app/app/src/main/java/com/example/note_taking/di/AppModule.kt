@@ -20,7 +20,6 @@ val appModule = module{
             repository = get()
         )
     }
-
     single{
         createHttpClient()
     }

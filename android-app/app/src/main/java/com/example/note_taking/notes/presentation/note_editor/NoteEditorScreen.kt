@@ -14,9 +14,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.note_taking.notes.presentation.components.NoteTopAppBar
@@ -26,11 +24,13 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun NoteEditorScreenRoot(
     noteId: String?,
-    viewModel : NoteEditorViewModel = koinViewModel {
-        parametersOf(noteId)
-    },
+
     onBackClick : () -> Unit,
 ){
+    val viewModel : NoteEditorViewModel = koinViewModel {
+        parametersOf(noteId)
+    }
+
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     NoteEditorScreen(
@@ -60,7 +60,7 @@ fun NoteEditorScreen(
                 actionsIcon = Icons.Filled.Save,
                 actionsIconDescription = "save note",
                 onActionsIconClick = {
-                    onAction(NoteEditorAction.OnSaveClick,)
+                    onAction(NoteEditorAction.OnSaveClick)
                 },
             )
         }
