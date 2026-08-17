@@ -21,11 +21,15 @@ class NoteService(
         return repository.save(updatedNote)
     }
 
+    fun findNoteById(id: ObjectId): Note{
+        return repository.findById(id).orElseThrow()
+    }
+
     fun save(note: Note): Note {
         return repository.save(note)
     }
 
-    fun findAll():List<Note>{
+    fun getAll():List<Note>{
         return repository.findAll()
     }
 

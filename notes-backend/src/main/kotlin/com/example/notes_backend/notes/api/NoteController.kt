@@ -23,7 +23,6 @@ import org.springframework.web.server.ResponseStatusException
 class NoteController (
     private val noteService: NoteService
 ){
-
     @PutMapping("/{id}")
     fun updateNote(
         @PathVariable id: String,
@@ -50,9 +49,14 @@ class NoteController (
 
     @GetMapping
     fun getNotes(): List<NoteResponse> {
-        return noteService.findAll().map{
+        return noteService.getAll().map{
             it.toNoteResponse()
         }
+    }
+
+    @GetMapping("/{id}")
+    fun findById(@PathVariable id: ObjectId): NoteResponse {
+        return noteService.findNoteById(id).toNoteResponse()
     }
 
     @PatchMapping("/{id}/favorite")
