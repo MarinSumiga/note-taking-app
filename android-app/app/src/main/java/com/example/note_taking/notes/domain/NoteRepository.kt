@@ -5,4 +5,5 @@ interface NoteRepository {
     suspend fun createNote(title:String,content:String): Note
     suspend fun findNoteById(id:String): Note
     suspend fun updateNote(id:String,title:String,content:String): Note
+    suspend fun toggleFavorite(id: String): Note
 }

@@ -14,7 +14,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.note_taking.notes.presentation.components.NoteTopAppBar
@@ -44,6 +46,7 @@ fun NoteEditorScreen(
     onAction: (NoteEditorAction) -> Unit,
     onBackClick: ()-> Unit
 ){
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {

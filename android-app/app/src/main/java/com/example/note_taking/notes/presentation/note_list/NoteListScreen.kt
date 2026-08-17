@@ -58,7 +58,7 @@ fun NoteListScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val lazyGridState = rememberLazyGridState()
 
-    LaunchedEffect(key1 = state.searchResults) {
+    LaunchedEffect(key1 = state.notes) {
         lazyGridState.animateScrollToItem(0)
     }
 
@@ -81,7 +81,7 @@ fun NoteListScreen(
         ) {
 
             NoteSearchBar(
-                searchQuery = state.searchQuery,
+                searchQuery = "",
                 onSearchQueryChange = {
                     onAction(NoteListAction.OnSearchQueryChange(it))
                 },
@@ -100,19 +100,6 @@ fun NoteListScreen(
                         CircularProgressIndicator()
                     } else {
                         when {
-                            state.searchResults.isNotEmpty() ->
-                                NoteList(
-                                    notes = state.searchResults,
-                                    onNoteClick = { noteId ->
-                                        onAction(NoteListAction.OnNoteClick(noteId))
-                                    },
-                                    modifier = Modifier.fillMaxSize(),
-                                    scrollState = lazyGridState,
-                                    onNoteFavoriteClick = { noteId ->
-                                        onAction(NoteListAction.OnNoteFavoriteClick(noteId))
-                                    }
-                                )
-
                             state.errorMessage !== null -> {
                                 Text(
                                     text = state.errorMessage,
@@ -120,7 +107,6 @@ fun NoteListScreen(
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                             }
-
                             else -> {
                                 NoteList(
                                     notes = state.notes,

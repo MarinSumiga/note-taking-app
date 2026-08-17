@@ -21,14 +21,12 @@ class NoteListViewModel(
 
             }
             is NoteListAction.OnSearchQueryChange ->{
-                _state.update {
-                    it.copy(searchQuery = action.query)
-                }
-            }
-            is NoteListAction.OnNoteDelete -> {
 
             }
+            is NoteListAction.OnNoteDelete -> {
+            }
             is NoteListAction.OnNoteFavoriteClick -> {
+                toggleFavorite(action.id)
                 println("Favorite clicked for note with id ${action.id}")
             }
 
@@ -57,7 +55,6 @@ class NoteListViewModel(
                 _state.update {
                     it.copy(
                         notes = notes,
-                        searchResults = notes,
                         isLoading = false
                     )
                 }
@@ -66,6 +63,27 @@ class NoteListViewModel(
                     it.copy(
                         errorMessage = error.message,
                         isLoading = false
+                    )
+                }
+            }
+        }
+    }
+
+    private fun toggleFavorite(id: String){
+        viewModelScope.launch {
+            try{
+                val updatedNote = repository.toggleFavorite(id)
+                _state.update { currentState ->
+                    currentState.copy(
+                        notes = currentState.notes.map { note ->
+                            if (note.id == updatedNote.id) updatedNote else note
+                        }
+                    )
+                }
+            }catch(errorMessage: Exception){
+                _state.update {
+                    it.copy(
+                        errorMessage = errorMessage.message
                     )
                 }
             }

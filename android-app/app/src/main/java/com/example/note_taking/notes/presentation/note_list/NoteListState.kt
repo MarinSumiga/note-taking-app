@@ -4,8 +4,6 @@ import com.example.note_taking.notes.domain.Note
 
 data class NoteListState(
     val notes: List<Note> = emptyList(),
-    val searchQuery: String = "",
-    val searchResults: List<Note> = emptyList(),
     val errorMessage: String? = null,
     val isLoading: Boolean = false
 )

@@ -42,6 +42,11 @@ class NoteRepositoryImpl(
         return updatedNote.toNote()
     }
 
+    override suspend fun toggleFavorite(id: String): Note {
+        val updatedNote = noteApi.toggleFavorite(id)
+        return updatedNote.toNote()
+    }
+
     override suspend fun findNoteById(id: String): Note {
         return noteApi.findNoteById(id).toNote()
     }
