@@ -27,4 +27,8 @@ class NoteRepositoryImpl(
         )
         return createdNote.toNote()
     }
+
+    override suspend fun findNoteById(id: String): Note {
+        return noteApi.findNoteById(id).toNote()
+    }
 }
