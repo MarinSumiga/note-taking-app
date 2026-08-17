@@ -15,6 +15,10 @@ class NoteListViewModel(
     private val _state = MutableStateFlow(NoteListState())
     val state = _state.asStateFlow()
 
+    init {
+        loadNotes()
+    }
+
     fun onAction(action : NoteListAction){
         when(action){
 

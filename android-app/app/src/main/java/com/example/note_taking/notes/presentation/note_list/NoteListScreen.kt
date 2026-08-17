@@ -35,10 +35,6 @@ fun NoteListScreenRoot(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val lazyGridState = rememberLazyGridState()
 
-    LaunchedEffect(Unit ) {
-        viewModel.onAction(NoteListAction.OnRefresh)
-    }
-
     NoteListScreen(
         state = state,
         onAction = viewModel::onAction,
