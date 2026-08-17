@@ -1,8 +1,7 @@
-package com.example.note_taking.notes.presentation.composables
+package com.example.note_taking.notes.presentation.note_list.components
 
-import android.R.attr.onClick
+
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid

@@ -1,4 +1,4 @@
-package com.example.note_taking.notes.presentation.composables
+package com.example.note_taking.notes.presentation.note_list.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
