@@ -1,6 +1,6 @@
-package com.example.note_taking.notes.presentation.note_detail
-data class NoteDetailState(
-    val noteId: String = "",
+package com.example.note_taking.notes.presentation.note_editor
+data class NoteEditorState(
+    val noteId: String? = null,
     val noteTitle:String = "",
     val noteContent: String = "",
     val errorMessage: String? = null,

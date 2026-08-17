@@ -27,6 +27,20 @@ class NoteRepositoryImpl(
         )
         return createdNote.toNote()
     }
+    override suspend fun updateNote(
+        id: String,
+        title: String,
+        content: String
+    ): Note{
+        val updatedNote = noteApi.updateNote(
+            id = id,
+            request = CreateNoteRequestDto(
+                title = title,
+                content = content
+            )
+        )
+        return updatedNote.toNote()
+    }
 
     override suspend fun findNoteById(id: String): Note {
         return noteApi.findNoteById(id).toNote()

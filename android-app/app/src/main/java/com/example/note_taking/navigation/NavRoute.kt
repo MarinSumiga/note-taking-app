@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 data object NoteListScreenRoute : NavKey
 
 @Serializable
-data class NoteDetailScreenRoute(
-    val noteId: String,
+data class NoteEditorScreenRoute(
+    val noteId: String?,
 ) : NavKey
+

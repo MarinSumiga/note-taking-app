@@ -4,7 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.note_taking.notes.domain.Note
-import com.example.note_taking.notes.presentation.composables.NoteListItem
+import com.example.note_taking.notes.presentation.note_list.components.NoteListItem
 import kotlin.time.Clock
 
 

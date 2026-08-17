@@ -15,10 +15,6 @@ class NoteListViewModel(
     private val _state = MutableStateFlow(NoteListState())
     val state = _state.asStateFlow()
 
-    init{
-        loadNotes()
-    }
-
     fun onAction(action : NoteListAction){
         when(action){
             is NoteListAction.OnNoteClick ->{
@@ -35,13 +31,26 @@ class NoteListViewModel(
             is NoteListAction.OnNoteFavoriteClick -> {
                 println("Favorite clicked for note with id ${action.id}")
             }
+
+            is NoteListAction.OnCreateNewNoteClick ->{
+                println("Create new note clicked")
+            }
+
+            is NoteListAction.OnRefresh -> {
+                loadNotes()
+            }
+
         }
     }
 
     private fun loadNotes(){
         viewModelScope.launch {
             _state.update{
-                it.copy(isLoading = true)
+                it.copy(
+                    isLoading = true,
+                    errorMessage = null
+                )
+
             }
             try{
                 val notes = repository.getNotes()

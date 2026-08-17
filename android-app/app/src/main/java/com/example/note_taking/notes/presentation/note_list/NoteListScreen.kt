@@ -5,12 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,22 +19,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.note_taking.notes.presentation.composables.NoteList
-import com.example.note_taking.notes.presentation.composables.NoteSearchBar
+import com.example.note_taking.notes.presentation.note_list.components.NoteList
+import com.example.note_taking.notes.presentation.note_list.components.NoteListFAB
+import com.example.note_taking.notes.presentation.note_list.components.NoteSearchBar
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun NoteListScreenRoot(
     viewModel: NoteListViewModel = koinViewModel(),
     onNoteClick: (String) -> Unit,
+    onNoteCreateClick: () -> Unit
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit ) {
+        viewModel.onAction(NoteListAction.OnRefresh)
+    }
 
     NoteListScreen(
         state = state,
         onAction = {action ->
             when(action){
                 is NoteListAction.OnNoteClick -> onNoteClick(action.id)
+                is NoteListAction.OnCreateNewNoteClick -> onNoteCreateClick()
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -57,78 +62,80 @@ fun NoteListScreen(
         lazyGridState.animateScrollToItem(0)
     }
 
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        floatingActionButton = {
+            NoteListFAB(
+                onClick = {
+                    onAction(NoteListAction.OnCreateNewNoteClick)
+                }
+            )
+        },
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        NoteSearchBar(
-            searchQuery = state.searchQuery,
-            onSearchQueryChange = {
-                onAction(NoteListAction.OnSearchQueryChange(it))
-            },
-            onSearch = {
-                keyboardController?.hide()
-            },
-            Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-        )
-
-        Surface(
+    ) { innerPadding ->
+        Column(
             modifier = Modifier
-                .weight(1f)
-                .padding(12.dp)
-                .fillMaxWidth(),
-            color = Color.Transparent,
-            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
+                .fillMaxSize()
+                .padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                modifier = Modifier.padding(16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                if (state.isLoading) {
-                    CircularProgressIndicator()
-                } else {
-                    when {
-                        state.searchResults.isNotEmpty() ->
-                            NoteList(
-                                notes = state.searchResults,
-                                onNoteClick = { noteId ->
-                                    onAction(NoteListAction.OnNoteClick(noteId))
-                                },
-                                modifier = Modifier.fillMaxSize(),
-                                scrollState = lazyGridState,
-                                onNoteFavoriteClick = { noteId ->
-                                    onAction(NoteListAction.OnNoteFavoriteClick(noteId))
-                                }
-                            )
 
-                        state.errorMessage !== null -> {
-                            Text(
-                                text = state.errorMessage,
-                                color = Color.Red,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
+            NoteSearchBar(
+                searchQuery = state.searchQuery,
+                onSearchQueryChange = {
+                    onAction(NoteListAction.OnSearchQueryChange(it))
+                },
+                onSearch = {
+                    keyboardController?.hide()
+                },
+                Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            )
+                Box(
+                    modifier = Modifier.padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (state.isLoading) {
+                        CircularProgressIndicator()
+                    } else {
+                        when {
+                            state.searchResults.isNotEmpty() ->
+                                NoteList(
+                                    notes = state.searchResults,
+                                    onNoteClick = { noteId ->
+                                        onAction(NoteListAction.OnNoteClick(noteId))
+                                    },
+                                    modifier = Modifier.fillMaxSize(),
+                                    scrollState = lazyGridState,
+                                    onNoteFavoriteClick = { noteId ->
+                                        onAction(NoteListAction.OnNoteFavoriteClick(noteId))
+                                    }
+                                )
 
-                        else -> {
-                            NoteList(
-                                notes = state.notes,
-                                onNoteClick = { noteId ->
-                                    onAction(NoteListAction.OnNoteClick(noteId))
-                                },
-                                modifier = Modifier.fillMaxSize(),
-                                scrollState = lazyGridState,
-                                onNoteFavoriteClick = { noteId ->
-                                    onAction(NoteListAction.OnNoteFavoriteClick(noteId))
-                                }
-                            )
+                            state.errorMessage !== null -> {
+                                Text(
+                                    text = state.errorMessage,
+                                    color = Color.Red,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+
+                            else -> {
+                                NoteList(
+                                    notes = state.notes,
+                                    onNoteClick = { noteId ->
+                                        onAction(NoteListAction.OnNoteClick(noteId))
+                                    },
+                                    modifier = Modifier.fillMaxSize(),
+                                    scrollState = lazyGridState,
+                                    onNoteFavoriteClick = { noteId ->
+                                        onAction(NoteListAction.OnNoteFavoriteClick(noteId))
+                                    }
+                                )
+                            }
                         }
                     }
-                }
             }
         }
     }

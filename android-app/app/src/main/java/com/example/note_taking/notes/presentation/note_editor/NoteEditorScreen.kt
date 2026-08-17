@@ -1,4 +1,4 @@
-package com.example.note_taking.notes.presentation.note_detail
+package com.example.note_taking.notes.presentation.note_editor
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,68 +10,55 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.note_taking.notes.presentation.components.NoteTopAppBar
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun NoteDetailScreenRoot(
-    noteId: String,
-    viewModel : NoteDetailViewModel = koinViewModel {
+fun NoteEditorScreenRoot(
+    noteId: String?,
+    viewModel : NoteEditorViewModel = koinViewModel {
         parametersOf(noteId)
     },
     onBackClick : () -> Unit,
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-
-    NoteDetailScreen(
+    NoteEditorScreen(
         state = state,
-        onAction = { action ->
-            viewModel.onAction (action)
-        },
+        onAction = viewModel::onAction,
         onBackClick = onBackClick
     )
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NoteDetailScreen(
-    state: NoteDetailState,
-    onAction: (NoteDetailAction) -> Unit,
+fun NoteEditorScreen(
+    state: NoteEditorState,
+    onAction: (NoteEditorAction) -> Unit,
     onBackClick: ()-> Unit
 ){
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(state.noteTitle)
+            NoteTopAppBar(
+                topAppBarTitle = state.noteTitle,
+                navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
+                onBackClick = onBackClick,
+                onTitleChange = {
+                    onAction(NoteEditorAction.OnTitleChange(it))
                 },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
+                actionsIcon = Icons.Filled.Save,
+                actionsIconDescription = "save note",
+                onActionsIconClick = {
+                    onAction(NoteEditorAction.OnSaveClick,)
                 },
-                actions = {
-                    IconButton(onClick = {}){
-                        Icon(
-                            imageVector = Icons.Filled.Save,
-                            contentDescription = "More"
-                        )
-                    }
-                }
             )
         }
     ) {innerPadding->
@@ -92,7 +79,7 @@ fun NoteDetailScreen(
                     OutlinedTextField(
                         value = state.noteContent,
                         onValueChange = {
-                            onAction(NoteDetailAction.OnContentChange(it))
+                            onAction(NoteEditorAction.OnContentChange(it))
                         },
                         modifier = Modifier
                             .weight(1f)

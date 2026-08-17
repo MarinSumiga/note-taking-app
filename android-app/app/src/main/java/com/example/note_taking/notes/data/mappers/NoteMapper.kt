@@ -12,3 +12,13 @@ fun NoteDto.toNote(): Note {
         isFavorite = isFavorite,
     )
 }
+
+fun Note.toNoteDto(): NoteDto  {
+    return NoteDto(
+        id = id,
+        title = title,
+        content = content,
+        createdAt = createdAt,
+        isFavorite = isFavorite,
+    )
+}

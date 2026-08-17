@@ -2,22 +2,25 @@ package com.example.note_taking.di
 
 import com.example.note_taking.notes.data.network.NoteApi
 import com.example.note_taking.notes.data.network.createHttpClient
-import com.example.note_taking.notes.data.repository.RemoteNoteRepository
+import com.example.note_taking.notes.data.repository.NoteRepositoryImpl
 import com.example.note_taking.notes.domain.NoteRepository
-import com.example.note_taking.notes.presentation.note_detail.NoteDetailViewModel
+import com.example.note_taking.notes.presentation.note_editor.NoteEditorViewModel
 import com.example.note_taking.notes.presentation.note_list.NoteListViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module{
+
     viewModel {
-        NoteListViewModel(
+        NoteListViewModel(repository = get())
+    }
+    viewModel {
+        NoteEditorViewModel(
+            noteId = it.get(),
             repository = get()
         )
     }
-    viewModel {
-        NoteDetailViewModel(noteId = it.get())
-    }
+
     single{
         createHttpClient()
     }
@@ -25,6 +28,6 @@ val appModule = module{
         NoteApi(get())
     }
     single<NoteRepository>{
-        RemoteNoteRepository(get())
+        NoteRepositoryImpl(get())
     }
 }

@@ -6,7 +6,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.example.note_taking.notes.presentation.note_detail.NoteDetailScreenRoot
+import com.example.note_taking.notes.presentation.note_editor.NoteEditorScreenRoot
 import com.example.note_taking.notes.presentation.note_list.NoteListScreenRoot
 import kotlin.collections.listOf
 
@@ -16,16 +16,21 @@ fun NavigationRoot(
 ){
     val backStack = rememberNavBackStack(NoteListScreenRoute)
 
-    val onBack: ()-> Unit = {
+    val onNavigateBack: ()-> Unit = {
         backStack.removeLastOrNull()
     }
-    val onNoteClick: (String) -> Unit = {
-        backStack.addLast(NoteDetailScreenRoute(noteId = it))
+
+    val onNavigateToNoteDetails: (String) -> Unit = {
+        backStack.addLast(NoteEditorScreenRoute(noteId = it))
+    }
+
+    val onNavigateToCreateNote: () -> Unit = {
+        backStack.addLast(NoteEditorScreenRoute(noteId = null))
     }
 
     NavDisplay(
         backStack = backStack,
-        onBack = onBack,
+        onBack = onNavigateBack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator(),
@@ -37,17 +42,18 @@ fun NavigationRoot(
                         key = key,
                     ){
                         NoteListScreenRoot(
-                            onNoteClick = onNoteClick
+                            onNoteClick = onNavigateToNoteDetails,
+                            onNoteCreateClick = onNavigateToCreateNote
                         )
                     }
                 }
-                is NoteDetailScreenRoute -> {
+                is NoteEditorScreenRoute -> {
                     NavEntry(
                         key = key,
                     ){
-                        NoteDetailScreenRoot(
+                        NoteEditorScreenRoot(
                             noteId = key.noteId,
-                            onBackClick = onBack
+                            onBackClick = onNavigateBack
                         )
                     }
                 }
