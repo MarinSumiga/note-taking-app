@@ -1,6 +1,5 @@
 package com.example.note_taking.notes.data.network
 
-import androidx.room.util.appendPlaceholders
 import com.example.note_taking.notes.data.dto.CreateNoteRequestDto
 import com.example.note_taking.notes.data.dto.NoteDto
 import io.ktor.client.HttpClient

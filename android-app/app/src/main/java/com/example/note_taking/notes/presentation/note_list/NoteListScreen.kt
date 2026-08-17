@@ -40,15 +40,9 @@ fun NoteListScreenRoot(
 
     NoteListScreen(
         state = state,
-        onAction = {action ->
-            when(action){
-                is NoteListAction.OnNoteClick -> onNoteClick(action.id)
-                is NoteListAction.OnCreateNewNoteClick -> onNoteCreateClick()
-                else -> Unit
-            }
-            viewModel.onAction(action)
-        },
-
+        onAction = viewModel::onAction,
+        onNoteClick = onNoteClick,
+        onNoteCreateClick = onNoteCreateClick
     )
 }
 
@@ -56,6 +50,8 @@ fun NoteListScreenRoot(
 fun NoteListScreen(
     state: NoteListState,
     onAction: (NoteListAction) -> Unit,
+    onNoteClick: (String) -> Unit,
+    onNoteCreateClick: () -> Unit
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
     val lazyGridState = rememberLazyGridState()
@@ -69,7 +65,7 @@ fun NoteListScreen(
         floatingActionButton = {
             NoteListFAB(
                 onClick = {
-                    onAction(NoteListAction.OnCreateNewNoteClick)
+                    onNoteCreateClick()
                 }
             )
         },
@@ -113,7 +109,7 @@ fun NoteListScreen(
                                 NoteList(
                                     notes = state.notes,
                                     onNoteClick = { noteId ->
-                                        onAction(NoteListAction.OnNoteClick(noteId))
+                                        onNoteClick(noteId)
                                     },
                                     modifier = Modifier.fillMaxSize(),
                                     scrollState = lazyGridState,

@@ -17,21 +17,13 @@ class NoteListViewModel(
 
     fun onAction(action : NoteListAction){
         when(action){
-            is NoteListAction.OnNoteClick ->{
 
-            }
             is NoteListAction.OnSearchQueryChange ->{
 
-            }
-            is NoteListAction.OnNoteDelete -> {
             }
             is NoteListAction.OnNoteFavoriteClick -> {
                 toggleFavorite(action.id)
                 println("Favorite clicked for note with id ${action.id}")
-            }
-
-            is NoteListAction.OnCreateNewNoteClick ->{
-                println("Create new note clicked")
             }
 
             is NoteListAction.OnRefresh -> {

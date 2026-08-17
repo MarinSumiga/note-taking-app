@@ -1,6 +1,5 @@
-package com.example.note_taking.notes.presentation.components
+package com.example.note_taking.notes.presentation.note_editor.components
 
-import android.R.attr.navigationIcon
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon

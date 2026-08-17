@@ -1,4 +1,4 @@
-package com.example.note_taking.utils.permissions
+package com.example.note_taking.permissions.permissions
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import com.example.note_taking.utils.components.PermissionDialog
+import com.example.note_taking.permissions.components.PermissionDialog
 
 
 @Composable

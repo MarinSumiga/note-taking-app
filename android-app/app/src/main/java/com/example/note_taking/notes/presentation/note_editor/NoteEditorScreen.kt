@@ -17,14 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.note_taking.notes.presentation.components.NoteTopAppBar
+import com.example.note_taking.notes.presentation.note_editor.components.NoteTopAppBar
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
 fun NoteEditorScreenRoot(
     noteId: String?,
-
     onBackClick : () -> Unit,
 ){
     val viewModel : NoteEditorViewModel = koinViewModel {

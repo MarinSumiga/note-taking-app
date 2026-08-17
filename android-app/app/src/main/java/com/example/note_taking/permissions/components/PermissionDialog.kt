@@ -1,4 +1,4 @@
-package com.example.note_taking.utils.components
+package com.example.note_taking.permissions.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
