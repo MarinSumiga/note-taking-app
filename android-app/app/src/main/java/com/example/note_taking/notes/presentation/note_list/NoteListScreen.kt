@@ -1,5 +1,6 @@
 package com.example.note_taking.notes.presentation.note_list
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.note_taking.notes.domain.notes
 import com.example.note_taking.notes.presentation.composables.NoteList
 import com.example.note_taking.notes.presentation.composables.NoteSearchBar
 import org.koin.compose.viewmodel.koinViewModel
@@ -72,9 +72,11 @@ fun NoteListScreen(
             onSearch = {
                 keyboardController?.hide()
             },
-            Modifier.padding(16.dp)
+            Modifier
+                .padding(16.dp)
                 .fillMaxWidth()
         )
+
         Surface(
             modifier = Modifier
                 .weight(1f)
@@ -83,41 +85,48 @@ fun NoteListScreen(
             color = Color.Transparent,
             shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
         ) {
-            if (state.isLoading){
-                CircularProgressIndicator()
-            }else{
-                when{
-                    state.searchResults.isNotEmpty() ->
-                        NoteList(
-                        notes = state.searchResults,
-                        onNoteClick = { noteId ->
-                            onAction(NoteListAction.OnNoteClick(noteId))
-                        },
-                        modifier = Modifier.fillMaxSize(),
-                        scrollState = lazyGridState,
-                            onNoteFavoriteClick = { noteId ->
-                                onAction(NoteListAction.OnNoteFavoriteClick(noteId))
-                            }
-                    )
-                    state.errorMessage !== null ->{
-                        Text(
-                            text = state.errorMessage,
-                            color = Color.Red,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                    else -> {
-                        NoteList(
-                            notes = notes,
-                            onNoteClick = { noteId ->
-                                onAction(NoteListAction.OnNoteClick(noteId))
-                            },
-                            modifier = Modifier.fillMaxSize(),
-                            scrollState = lazyGridState,
-                            onNoteFavoriteClick = { noteId ->
-                                onAction(NoteListAction.OnNoteFavoriteClick(noteId))
-                            }
-                        )
+            Box(
+                modifier = Modifier.padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                if (state.isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    when {
+                        state.searchResults.isNotEmpty() ->
+                            NoteList(
+                                notes = state.searchResults,
+                                onNoteClick = { noteId ->
+                                    onAction(NoteListAction.OnNoteClick(noteId))
+                                },
+                                modifier = Modifier.fillMaxSize(),
+                                scrollState = lazyGridState,
+                                onNoteFavoriteClick = { noteId ->
+                                    onAction(NoteListAction.OnNoteFavoriteClick(noteId))
+                                }
+                            )
+
+                        state.errorMessage !== null -> {
+                            Text(
+                                text = state.errorMessage,
+                                color = Color.Red,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+
+                        else -> {
+                            NoteList(
+                                notes = state.notes,
+                                onNoteClick = { noteId ->
+                                    onAction(NoteListAction.OnNoteClick(noteId))
+                                },
+                                modifier = Modifier.fillMaxSize(),
+                                scrollState = lazyGridState,
+                                onNoteFavoriteClick = { noteId ->
+                                    onAction(NoteListAction.OnNoteFavoriteClick(noteId))
+                                }
+                            )
+                        }
                     }
                 }
             }

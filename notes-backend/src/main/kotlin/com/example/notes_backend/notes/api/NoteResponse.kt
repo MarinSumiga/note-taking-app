@@ -1,9 +1,7 @@
 package com.example.notes_backend.notes.api
 
 import com.example.notes_backend.notes.Note
-import com.example.notes_backend.notes.NoteRepository
-import java.time.Instant
-import java.time.LocalDateTime
+import kotlin.time.Instant
 
 data class NoteResponse (
     val id:String,

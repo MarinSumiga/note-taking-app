@@ -1,7 +1,7 @@
 package com.example.note_taking.notes.domain
 
-import java.time.Instant
 
+import kotlin.time.Instant
 
 data class Note(
     val id: String,
@@ -10,14 +10,3 @@ data class Note(
     val createdAt: Instant,
     val isFavorite: Boolean,
 )
-
-
-val notes = (1..19).map {
-    Note(
-        id = it.toString(),
-        title = "Title $it",
-        content = "Content $it",
-        isFavorite = false,
-        createdAt = Instant.now()
-    )
-}

@@ -5,7 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.note_taking.notes.domain.Note
 import com.example.note_taking.notes.presentation.composables.NoteListItem
-import java.time.Instant
+import kotlin.time.Clock
+
 
 
 @Preview
@@ -16,7 +17,7 @@ fun NoteListItemPreview(){
         title = "Title 1",
         content = "Content",
         isFavorite = false,
-        createdAt = Instant.now(),
+        createdAt = Clock.System.now(),
     )
 
     MaterialTheme(
