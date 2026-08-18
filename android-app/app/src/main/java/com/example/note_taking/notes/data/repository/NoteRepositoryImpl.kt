@@ -1,53 +1,37 @@
 package com.example.note_taking.notes.data.repository
 
-import com.example.note_taking.notes.data.remote.CreateNoteRequestDto
-import com.example.note_taking.notes.data.remote.toNote
-import com.example.note_taking.notes.data.remote.NoteApi
+import com.example.note_taking.notes.data.local.NoteDao
+import com.example.note_taking.notes.data.local.toEntity
+import com.example.note_taking.notes.data.local.toNote
 import com.example.note_taking.notes.domain.Note
 import com.example.note_taking.notes.domain.NoteRepository
 
+
 class NoteRepositoryImpl(
-    private val noteApi: NoteApi
+    private val noteDao: NoteDao
 ): NoteRepository {
     override suspend fun getNotes():List<Note> {
-        return noteApi.getNotes().map {
+        return noteDao.getNotes().map {
             it.toNote()
         }
     }
-
-    override suspend fun createNote(
-        title: String,
-        content: String
-    ): Note {
-        val createdNote = noteApi.createNote(
-            CreateNoteRequestDto(
-                title = title,
-                content = content
-            )
+    override suspend fun upsertNote(note: Note) {
+        noteDao.upsertNote(note.toEntity()
         )
-        return createdNote.toNote()
-    }
-    override suspend fun updateNote(
-        id: String,
-        title: String,
-        content: String
-    ): Note{
-        val updatedNote = noteApi.updateNote(
-            id = id,
-            request = CreateNoteRequestDto(
-                title = title,
-                content = content
-            )
-        )
-        return updatedNote.toNote()
     }
 
     override suspend fun toggleFavorite(id: String): Note {
-        val updatedNote = noteApi.toggleFavorite(id)
-        return updatedNote.toNote()
+        val existingNote = findNoteById(id)
+        val updatedNote = existingNote.copy(
+            isFavorite = !existingNote.isFavorite
+        )
+        upsertNote(updatedNote)
+        return updatedNote
     }
 
+
     override suspend fun findNoteById(id: String): Note {
-        return noteApi.findNoteById(id).toNote()
+        return noteDao.getNoteById(id)?.toNote()
+            ?: throw NoSuchElementException("Note with ID $id was not found")
     }
 }
