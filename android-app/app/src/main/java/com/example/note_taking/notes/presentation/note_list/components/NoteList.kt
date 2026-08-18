@@ -14,11 +14,12 @@ import com.example.note_taking.notes.domain.Note
 
 @Composable
 fun NoteList(
+    modifier : Modifier = Modifier,
     notes: List<Note>,
     onNoteClick: (String) -> Unit,
     onNoteFavoriteClick: (String) -> Unit,
-    modifier : Modifier = Modifier,
-    scrollState : LazyGridState = rememberLazyGridState()
+    scrollState : LazyGridState = rememberLazyGridState(),
+    onNoteDeleteClick: (String) -> Unit,
 ){
     LazyVerticalGrid(
         modifier = modifier,
@@ -34,7 +35,8 @@ fun NoteList(
             NoteListItem(
                 note = it,
                 onNoteFavoriteClick = onNoteFavoriteClick,
-                onClick = {onNoteClick(it.id)}
+                onClick = { onNoteClick(it.id) },
+                onNoteDeleteClick = onNoteDeleteClick
             )
         }
     }

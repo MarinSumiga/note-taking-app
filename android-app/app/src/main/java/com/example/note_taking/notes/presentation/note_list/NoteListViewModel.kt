@@ -29,7 +29,11 @@ class NoteListViewModel(
             }
             is NoteListAction.OnNoteFavoriteClick -> {
                 toggleFavorite(action.id)
-                println("Favorite clicked for note with id ${action.id}")
+            }
+            is NoteListAction.OnDeleteNoteClick -> {
+                viewModelScope.launch {
+                    repository.deleteNote(action.id)
+                }
             }
 
             is NoteListAction.OnRefresh -> {}

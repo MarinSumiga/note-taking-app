@@ -27,6 +27,7 @@ fun NoteListItemPreview(){
             note = note,
             onNoteFavoriteClick = {},
             onClick = {},
+            onNoteDeleteClick = {}
         )
     }
 }

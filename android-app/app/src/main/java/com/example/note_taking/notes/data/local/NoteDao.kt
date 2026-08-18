@@ -15,4 +15,10 @@ interface NoteDao {
 
     @Upsert
     suspend fun upsertNote(note: NoteEntity)
+
+    @Query("UPDATE notes SET isFavorite = NOT isFavorite WHERE id = :id")
+    suspend fun toggleFavorite(id: String)
+
+    @Query("DELETE FROM notes WHERE id = :id")
+    suspend fun deleteNote(id: String)
 }

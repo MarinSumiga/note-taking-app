@@ -6,5 +6,6 @@ interface NoteRepository {
     suspend fun upsertNote(note: Note)
     fun getNotes(): Flow<List<Note>>
     suspend fun findNoteById(id:String): Note
-    suspend fun toggleFavorite(id: String): Note
+    suspend fun toggleFavorite(id: String)
+    suspend fun deleteNote(id: String)
 }

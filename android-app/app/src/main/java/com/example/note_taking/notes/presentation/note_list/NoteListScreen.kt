@@ -107,6 +107,9 @@ fun NoteListScreen(
                                     scrollState = lazyGridState,
                                     onNoteFavoriteClick = { noteId ->
                                         onAction(NoteListAction.OnNoteFavoriteClick(noteId))
+                                    },
+                                    onNoteDeleteClick = { noteId ->
+                                        onAction(NoteListAction.OnDeleteNoteClick(noteId))
                                     }
                                 )
                             }

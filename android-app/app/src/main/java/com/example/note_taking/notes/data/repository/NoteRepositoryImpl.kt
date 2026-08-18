@@ -23,17 +23,16 @@ class NoteRepositoryImpl(
         noteDao.upsertNote(note.toEntity())
     }
 
-    override suspend fun toggleFavorite(id: String): Note {
-        val existingNote = findNoteById(id)
-        val updatedNote = existingNote.copy(
-            isFavorite = !existingNote.isFavorite
-        )
-        upsertNote(updatedNote)
-        return updatedNote
+    override suspend fun toggleFavorite(id: String){
+        noteDao.toggleFavorite(id)
     }
 
     override suspend fun findNoteById(id: String): Note {
         return noteDao.getNoteById(id)?.toNote()
             ?: throw NoSuchElementException("Note with ID $id was not found")
+    }
+
+    override suspend fun deleteNote(id: String){
+        noteDao.deleteNote(id)
     }
 }

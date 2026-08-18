@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.HorizontalDivider
@@ -29,6 +30,7 @@ fun NoteListItem (
     note: Note,
     onClick: () -> Unit,
     onNoteFavoriteClick: (String) -> Unit,
+    onNoteDeleteClick: (String) -> Unit
 ){
 
     Surface(
@@ -37,7 +39,7 @@ fun NoteListItem (
             .clickable (
                 onClick = onClick
             ),
-        color = BrighBrown,
+        color = BrighBrown.copy(0.3f),
         border = BorderStroke(1.dp, Color.Black)
     ){
         Box(
@@ -71,7 +73,7 @@ fun NoteListItem (
                     onNoteFavoriteClick(note.id)
                 },
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
+                    .align(Alignment.BottomStart)
                     .padding(4.dp),
             ){
                 Icon(
@@ -84,10 +86,27 @@ fun NoteListItem (
                     tint = if (note.isFavorite){
                         Color.Yellow
                     }else{
-                        Color.LightGray
+                        Color.Black
                     }
                 )
             }
+
+            IconButton(
+                onClick = {
+                    onNoteDeleteClick(note.id)
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(4.dp),
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = "Delete",
+                    tint = Color.Black
+                )
+            }
+
+
         }
     }
 }
