@@ -3,10 +3,12 @@ package com.example.note_taking.notes.presentation.note_list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.note_taking.notes.domain.NoteRepository
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -16,6 +18,9 @@ class NoteListViewModel(
 
     private val _state = MutableStateFlow(NoteListState())
     val state = _state.asStateFlow()
+
+    private val _effects = Channel<NoteListEffect>(Channel.BUFFERED)
+    val effects = _effects.receiveAsFlow()
 
     init {
         observeNotes()
@@ -33,6 +38,7 @@ class NoteListViewModel(
             is NoteListAction.OnDeleteNoteClick -> {
                 viewModelScope.launch {
                     repository.deleteNote(action.id)
+                    _effects.send(NoteListEffect.NoteDeleted)
                 }
             }
 

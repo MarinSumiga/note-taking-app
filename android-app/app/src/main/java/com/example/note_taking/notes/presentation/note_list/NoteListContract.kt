@@ -15,5 +15,9 @@ sealed interface NoteListAction {
     data class OnDeleteNoteClick(val id:String): NoteListAction
 }
 
+sealed interface NoteListEffect {
+    data object NoteDeleted : NoteListEffect
+}
+
 
 

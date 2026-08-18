@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.note_taking.notes.domain.Note
-import com.example.note_taking.notes.presentation.note_list.components.NoteListItem
+import com.example.note_taking.notes.presentation.note_list.components.note_list_item.NoteListItem
 import kotlin.time.Clock
 
 
@@ -25,9 +25,9 @@ fun NoteListItemPreview(){
         NoteListItem(
             modifier = Modifier,
             note = note,
-            onNoteFavoriteClick = {},
+            onFavoriteClick = {},
             onClick = {},
-            onNoteDeleteClick = {}
+            onDeleteClick = {},
         )
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.note_taking.notes.domain.Note
+import com.example.note_taking.notes.presentation.note_list.components.note_list_item.NoteListItem
 
 @Composable
 fun NoteList(
@@ -23,20 +24,20 @@ fun NoteList(
 ){
     LazyVerticalGrid(
         modifier = modifier,
-        columns = GridCells.Fixed(maxOf(3)),
+        columns = GridCells.Adaptive(minSize = 140.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         state = scrollState,
     ) {
         items(
             items = notes,
-            key = {it.id}
-        ){
+            key = Note::id,
+        ) { note ->
             NoteListItem(
-                note = it,
-                onNoteFavoriteClick = onNoteFavoriteClick,
-                onClick = { onNoteClick(it.id) },
-                onNoteDeleteClick = onNoteDeleteClick
+                note = note,
+                onClick = { onNoteClick(note.id) },
+                onFavoriteClick = { onNoteFavoriteClick(note.id) },
+                onDeleteClick = { onNoteDeleteClick(note.id) },
             )
         }
     }

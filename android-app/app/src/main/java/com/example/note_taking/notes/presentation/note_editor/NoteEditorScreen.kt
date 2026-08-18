@@ -6,11 +6,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -18,8 +22,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.room.util.TableInfo
 import com.example.note_taking.notes.presentation.note_editor.components.NoteEditorContentField
 import com.example.note_taking.notes.presentation.note_editor.components.NoteTopAppBar
 import org.koin.compose.viewmodel.koinViewModel
@@ -86,24 +93,36 @@ fun NoteEditorScreen(
             )
         }
     ) { innerPadding ->
-        when {
-            state.isLoading -> {
-                CircularProgressIndicator()
-            }
+        Column(
+            modifier = Modifier.padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth(0.7f),
+                color = MaterialTheme.colorScheme.outlineVariant,
+            )
 
-            state.errorMessage != null -> {
-                Text(state.errorMessage)
-            }
+            when {
+                state.isLoading -> {
+                    CircularProgressIndicator()
+                }
 
-            else -> {
-                NoteEditorContentField(
-                    value = state.note?.content.orEmpty(),
-                    onValueChange = {
-                        onAction(NoteEditorAction.OnContentChange(it))
-                    },
-                    modifier = Modifier.padding(innerPadding)
-                )
+                state.errorMessage != null -> {
+                    Text(state.errorMessage)
+                }
+
+                else -> {
+                    NoteEditorContentField(
+                        value = state.note?.content.orEmpty(),
+                        onValueChange = {
+                            onAction(NoteEditorAction.OnContentChange(it))
+                        },
+                        modifier = Modifier
+                    )
+                }
             }
         }
+
     }
 }
