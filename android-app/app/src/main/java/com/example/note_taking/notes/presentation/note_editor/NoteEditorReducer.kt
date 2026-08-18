@@ -7,11 +7,9 @@ internal sealed interface NoteEditorMutation
     data class TitleChanged(
         val title: String
     ): NoteEditorMutation
-
     data class ContentChanged(
         val content: String
     ): NoteEditorMutation
-
     data object SavingStarted: NoteEditorMutation
     data class SavingCompleted(
         val note: Note
@@ -19,7 +17,6 @@ internal sealed interface NoteEditorMutation
     data class SavingFailed(
         val errorMessage: String?
     ): NoteEditorMutation
-
     data object LoadingStarted: NoteEditorMutation
     data class LoadingCompleted(
         val note: Note
@@ -35,15 +32,20 @@ internal object NoteEditorReducer {
         mutation: NoteEditorMutation
     ): NoteEditorState {
         return when (mutation) {
+
             is NoteEditorMutation.TitleChanged -> {
+                val note = state.note ?: return state
                 state.copy(
-                    noteTitle = mutation.title
+                    note = note.copy(title = mutation.title),
+                    hasUnsavedChanges = true
                 )
             }
 
             is NoteEditorMutation.ContentChanged -> {
+                val note = state.note ?: return state
                 state.copy(
-                    noteContent = mutation.content
+                    note = note.copy(content = mutation.content),
+                    hasUnsavedChanges = true
                 )
             }
 
@@ -55,14 +57,9 @@ internal object NoteEditorReducer {
             }
 
             is NoteEditorMutation.LoadingCompleted -> {
-                val note = mutation.note
-
                 state.copy(
-                    noteId = note.id,
-                    noteTitle = note.title,
-                    noteContent = note.content,
-                    savedTitle = note.title,
-                    savedContent = note.content,
+                    note = mutation.note,
+                    hasUnsavedChanges = false,
                     isLoading = false,
                     errorMessage = null
                 )
@@ -83,14 +80,10 @@ internal object NoteEditorReducer {
             }
 
             is NoteEditorMutation.SavingCompleted -> {
-                val note = mutation.note
 
                 state.copy(
-                    noteId = note.id,
-                    noteTitle = note.title,
-                    noteContent = note.content,
-                    savedTitle = note.title,
-                    savedContent = note.content,
+                    note = mutation.note,
+                    hasUnsavedChanges = false,
                     isSaving = false,
                     errorMessage = null
                 )
@@ -98,6 +91,7 @@ internal object NoteEditorReducer {
 
             is NoteEditorMutation.SavingFailed -> {
                 state.copy(
+                    hasUnsavedChanges = true,
                     isSaving = false,
                     errorMessage = mutation.errorMessage
                 )

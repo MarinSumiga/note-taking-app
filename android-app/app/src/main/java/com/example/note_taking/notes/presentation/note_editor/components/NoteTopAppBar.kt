@@ -20,7 +20,8 @@ fun NoteTopAppBar(
     actionsIcon: ImageVector,
     actionsIconDescription: String,
     onActionsIconClick: ()-> Unit,
-    isSaveEnabled: Boolean
+    isEditingEnabled: Boolean,
+    isSavingEnabled: Boolean
 ){
     TopAppBar(
         title = {
@@ -29,7 +30,7 @@ fun NoteTopAppBar(
                 onValueChange = onTitleChange,
                 modifier = Modifier
                     .fillMaxWidth(),
-                enabled = isSaveEnabled
+                enabled = isEditingEnabled
             )
         },
         navigationIcon = {
@@ -44,7 +45,7 @@ fun NoteTopAppBar(
         actions={
             IconButton(
                 onClick = onActionsIconClick,
-                enabled = isSaveEnabled
+                enabled = isSavingEnabled
             ) {
                 Icon(
                     imageVector = actionsIcon,

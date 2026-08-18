@@ -1,5 +1,7 @@
-package com.example.note_taking.notes.data.remote
+package com.example.note_taking.notes.data.network
 
+import com.example.note_taking.notes.data.remote.CreateNoteRequestDto
+import com.example.note_taking.notes.data.remote.NoteDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -42,7 +44,7 @@ class NoteApi(
     suspend fun updateNote(
         id: String,
         request: CreateNoteRequestDto
-    ): NoteDto{
+    ): NoteDto {
         return httpClient.put (BASE_URL){
             url{
                 appendPathSegments("notes", id)

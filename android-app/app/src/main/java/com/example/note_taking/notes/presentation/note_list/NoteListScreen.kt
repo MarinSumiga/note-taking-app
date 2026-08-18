@@ -12,7 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.note_taking.notes.presentation.note_list.components.NoteList
 import com.example.note_taking.notes.presentation.note_list.components.NoteListFAB
 import com.example.note_taking.notes.presentation.note_list.components.NoteSearchBar
@@ -29,7 +27,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun NoteListScreenRoot(
     onNoteClick: (String) -> Unit,
-    onNoteCreateClick: () -> Unit
+    onCreateNoteClick: () -> Unit
 ){
     val viewModel: NoteListViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -39,7 +37,7 @@ fun NoteListScreenRoot(
         state = state,
         onAction = viewModel::onAction,
         onNoteClick = onNoteClick,
-        onNoteCreateClick = onNoteCreateClick,
+        onCreateNoteClick = onCreateNoteClick,
         lazyGridState = lazyGridState
     )
 }
@@ -50,7 +48,7 @@ fun NoteListScreen(
     lazyGridState: LazyGridState,
     onAction: (NoteListAction) -> Unit,
     onNoteClick: (String) -> Unit,
-    onNoteCreateClick: () -> Unit
+    onCreateNoteClick: () -> Unit
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -59,7 +57,7 @@ fun NoteListScreen(
         floatingActionButton = {
             NoteListFAB(
                 onClick = {
-                    onNoteCreateClick()
+                    onCreateNoteClick()
                 }
             )
         },

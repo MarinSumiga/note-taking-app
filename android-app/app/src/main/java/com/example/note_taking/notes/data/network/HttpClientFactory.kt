@@ -1,4 +1,4 @@
-package com.example.note_taking.notes.data.remote
+package com.example.note_taking.notes.data.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android

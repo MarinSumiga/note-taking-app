@@ -7,6 +7,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.note_taking.notes.presentation.note_editor.NoteEditorScreenRoot
+import com.example.note_taking.notes.presentation.note_editor.NoteEditorScreenMode
 import com.example.note_taking.notes.presentation.note_list.NoteListScreenRoot
 import kotlin.collections.listOf
 
@@ -16,21 +17,21 @@ fun NavigationRoot(
 ){
     val backStack = rememberNavBackStack(NoteListScreenRoute)
 
-    val onNavigateBack: ()-> Unit = {
+    val navigateBack: ()-> Unit = {
         backStack.removeLastOrNull()
     }
 
-    val onNavigateToNoteDetails: (String) -> Unit = {
-        backStack.addLast(NoteEditorScreenRoute(noteId = it))
+    val navigateToNoteEditor: (String) -> Unit = {
+        backStack.addLast(NoteEditorScreenRoute(mode = NoteEditorScreenMode.Edit(it)))
     }
 
-    val onNavigateToCreateNote: () -> Unit = {
-        backStack.addLast(NoteEditorScreenRoute(noteId = null))
+    val navigateToCreateNote: () -> Unit = {
+        backStack.addLast(NoteEditorScreenRoute(mode=NoteEditorScreenMode.Create))
     }
 
     NavDisplay(
         backStack = backStack,
-        onBack = onNavigateBack,
+        onBack = navigateBack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator(),
@@ -42,8 +43,8 @@ fun NavigationRoot(
                         key = key,
                     ){
                         NoteListScreenRoot(
-                            onNoteClick = onNavigateToNoteDetails,
-                            onNoteCreateClick = onNavigateToCreateNote
+                            onNoteClick = navigateToNoteEditor,
+                            onCreateNoteClick= navigateToCreateNote,
                         )
                     }
                 }
@@ -52,8 +53,8 @@ fun NavigationRoot(
                         key = key,
                     ){
                         NoteEditorScreenRoot(
-                            noteId = key.noteId,
-                            onBackClick = onNavigateBack
+                            editorMode = key.mode,
+                            onBack = navigateBack
                         )
                     }
                 }

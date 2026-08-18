@@ -25,11 +25,11 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun NoteEditorScreenRoot(
-    noteId: String?,
-    onBackClick : () -> Unit,
+    editorMode: NoteEditorScreenMode,
+    onBack : () -> Unit,
 ){
     val viewModel : NoteEditorViewModel = koinViewModel {
-        parametersOf(noteId)
+        parametersOf(editorMode)
     }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -37,7 +37,7 @@ fun NoteEditorScreenRoot(
     LaunchedEffect(viewModel) {
         viewModel.effects.collect{ effect ->
             when(effect){
-                NoteEditorEffect.NavigateBack -> onBackClick()
+                NoteEditorEffect.NavigateBack -> onBack()
             }
         }
     }
@@ -62,7 +62,7 @@ fun NoteEditorScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             NoteTopAppBar(
-                topAppBarTitle = state.noteTitle,
+                topAppBarTitle = state.note?.title.orEmpty(),
                 navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
                 onBackClick = {
                     onAction(NoteEditorAction.OnBackClick)
@@ -75,7 +75,8 @@ fun NoteEditorScreen(
                 onActionsIconClick = {
                     onAction(NoteEditorAction.OnSaveClick)
                 },
-                isSaveEnabled = state.hasUnsavedChanges && !state.isSaving
+                isEditingEnabled = !state.isLoading && !state.isSaving,
+                isSavingEnabled = state.hasUnsavedChanges && !state.isSaving
             )
         }
     ) {innerPadding->
@@ -94,7 +95,8 @@ fun NoteEditorScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     OutlinedTextField(
-                        value = state.noteContent,
+                        value = state.note?.content.orEmpty(),
+                        enabled = !state.isSaving,
                         onValueChange = {
                             onAction(NoteEditorAction.OnContentChange(it))
                         },

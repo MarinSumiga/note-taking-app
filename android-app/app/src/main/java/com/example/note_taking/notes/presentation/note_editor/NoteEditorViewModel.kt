@@ -13,13 +13,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class NoteEditorViewModel(
+    mode: NoteEditorScreenMode,
     private val repository: NoteRepository,
-    noteId: String?
 ) : ViewModel() {
     private val _state = MutableStateFlow(
         NoteEditorState(
-            noteId = noteId,
-            isLoading = noteId != null
+           note = when(mode){
+               NoteEditorScreenMode.Create -> Note.createNew()
+               is NoteEditorScreenMode.Edit -> null
+           }
         )
     )
     val state = _state.asStateFlow()
@@ -29,7 +31,9 @@ class NoteEditorViewModel(
     private var navigateBackAfterSave = false
 
     init {
-        noteId?.let ( ::loadNote )
+        if(mode is NoteEditorScreenMode.Edit){
+            loadNote(mode.noteId)
+        }
     }
 
     fun onAction(action: NoteEditorAction) {
@@ -58,7 +62,6 @@ class NoteEditorViewModel(
                 }
             }
             NoteEditorAction.OnRefresh -> {
-                state.value.noteId?.let(::loadNote)
             }
         }
     }
@@ -84,26 +87,16 @@ class NoteEditorViewModel(
 
     private fun saveNote() {
         if (saveJob?.isActive == true) return
-        val currentState = state.value
+        val note = state.value.note ?: return
         mutate(NoteEditorMutation.SavingStarted)
+
         saveJob = viewModelScope.launch {
             try {
-                val savedNote = if (currentState.noteId.isNullOrBlank()) {
-                    repository.createNote(
-                        title = currentState.noteTitle,
-                        content = currentState.noteContent
-                    )
-                } else {
-                    repository.updateNote(
-                        id = currentState.noteId,
-                        title = currentState.noteTitle,
-                        content = currentState.noteContent
-                    )
-                }
-                mutate(NoteEditorMutation.SavingCompleted(savedNote))
-                if(navigateBackAfterSave){
-                    navigateBackAfterSave = false
-                    _effects.send(NoteEditorEffect.NavigateBack)
+                repository.upsertNote(note)
+                mutate(NoteEditorMutation.SavingCompleted(note))
+                if (navigateBackAfterSave) {
+                    navigateBackAfterSave=false
+                    emitNavigateBack()
                 }
             } catch (error: Exception) {
                 mutate(NoteEditorMutation.SavingFailed(error.message))

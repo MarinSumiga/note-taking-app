@@ -1,6 +1,7 @@
 package com.example.note_taking.navigation
 
 import androidx.navigation3.runtime.NavKey
+import com.example.note_taking.notes.presentation.note_editor.NoteEditorScreenMode
 import kotlinx.serialization.Serializable
 
 
@@ -10,6 +11,6 @@ data object NoteListScreenRoute : NavKey
 
 @Serializable
 data class NoteEditorScreenRoute(
-    val noteId: String?,
+    val mode: NoteEditorScreenMode,
 ) : NavKey
 

@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.note_taking.notes.domain.NoteRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -16,7 +18,7 @@ class NoteListViewModel(
     val state = _state.asStateFlow()
 
     init {
-        loadNotes()
+        observeNotes()
     }
 
     fun onAction(action : NoteListAction){
@@ -30,59 +32,44 @@ class NoteListViewModel(
                 println("Favorite clicked for note with id ${action.id}")
             }
 
-            is NoteListAction.OnRefresh -> {
-                loadNotes()
-            }
-
+            is NoteListAction.OnRefresh -> {}
         }
     }
 
-    private fun loadNotes(){
+    private fun observeNotes() {
         viewModelScope.launch {
-            _state.update{
-                it.copy(
-                    isLoading = true,
-                    errorMessage = null
-                )
-
-            }
-            try{
-                val notes = repository.getNotes()
-                _state.update {
-                    it.copy(
-                        notes = notes,
-                        isLoading = false
-                    )
+            repository.getNotes()
+                .onStart {
+                    _state.update {
+                        it.copy(
+                            isLoading = true,
+                            errorMessage = null
+                        )
+                    }
                 }
-            } catch (error: Exception){
-                _state.update{
-                    it.copy(
-                        errorMessage = error.message,
-                        isLoading = false
-                    )
+                .catch { error ->
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = error.message
+                        )
+                    }
                 }
-            }
+                .collect { notes ->
+                    _state.update {
+                        it.copy(
+                            notes = notes,
+                            isLoading = false,
+                            errorMessage = null
+                        )
+                    }
+                }
         }
     }
 
     private fun toggleFavorite(id: String){
         viewModelScope.launch {
-            try{
-                val updatedNote = repository.toggleFavorite(id)
-                _state.update { currentState ->
-                    currentState.copy(
-                        notes = currentState.notes.map { note ->
-                            if (note.id == updatedNote.id) updatedNote else note
-                        }
-                    )
-                }
-            }catch(errorMessage: Exception){
-                _state.update {
-                    it.copy(
-                        errorMessage = errorMessage.message
-                    )
-                }
-            }
+            repository.toggleFavorite(id)
         }
     }
 }
