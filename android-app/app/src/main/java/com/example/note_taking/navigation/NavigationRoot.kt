@@ -1,7 +1,18 @@
 package com.example.note_taking.navigation
 
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.entryProvider
@@ -41,6 +52,40 @@ fun NavigationRoot(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator(),
         ),
+        transitionSpec = {
+            (
+                    scaleIn(
+                        initialScale = 0.92f,
+                        animationSpec = tween(durationMillis = 300),
+                    ) + fadeIn(
+                        animationSpec = tween(durationMillis = 300),
+                    )
+                    ) togetherWith (
+                    scaleOut(
+                        targetScale = 1.05f,
+                        animationSpec = tween(durationMillis = 250),
+                    ) + fadeOut(
+                        animationSpec = tween(durationMillis = 250),
+                    )
+                    )
+        },
+        popTransitionSpec = {
+            (
+                    scaleIn(
+                        initialScale = 1.05f,
+                        animationSpec = tween(durationMillis = 300),
+                    ) + fadeIn(
+                        animationSpec = tween(durationMillis = 300),
+                    )
+                    ) togetherWith (
+                    scaleOut(
+                        targetScale = 0.92f,
+                        animationSpec = tween(durationMillis = 250),
+                    ) + fadeOut(
+                        animationSpec = tween(durationMillis = 250),
+                    )
+                    )
+        },
         entryProvider =
             entryProvider {
                 entry<Route.NoteEditorScreenRoute> {
