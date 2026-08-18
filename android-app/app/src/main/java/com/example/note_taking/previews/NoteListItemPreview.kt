@@ -2,6 +2,7 @@ package com.example.note_taking.previews
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.note_taking.notes.domain.Note
 import com.example.note_taking.notes.presentation.note_list.components.NoteListItem
@@ -20,10 +21,9 @@ fun NoteListItemPreview(){
         createdAt = Clock.System.now(),
     )
 
-    MaterialTheme(
-
-    ) {
+    MaterialTheme {
         NoteListItem(
+            modifier = Modifier,
             note = note,
             onNoteFavoriteClick = {},
             onClick = {},

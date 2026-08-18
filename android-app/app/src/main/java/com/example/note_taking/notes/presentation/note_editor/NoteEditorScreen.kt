@@ -27,6 +27,7 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun NoteEditorScreenRoot(
+    modifier: Modifier = Modifier,
     editorMode: NoteEditorScreenMode,
     onBack: () -> Unit,
 ) {
@@ -49,6 +50,7 @@ fun NoteEditorScreenRoot(
     }
 
     NoteEditorScreen(
+        modifier=modifier,
         state = state,
         onAction = viewModel::onAction
     )
@@ -57,11 +59,12 @@ fun NoteEditorScreenRoot(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteEditorScreen(
+    modifier: Modifier = Modifier,
     state: NoteEditorState,
     onAction: (NoteEditorAction) -> Unit,
 ) {
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             NoteTopAppBar(

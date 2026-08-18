@@ -26,6 +26,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun NoteListScreenRoot(
+    modifier: Modifier = Modifier,
     onNoteClick: (String) -> Unit,
     onCreateNoteClick: () -> Unit
 ){
@@ -34,6 +35,7 @@ fun NoteListScreenRoot(
     val lazyGridState = rememberLazyGridState()
 
     NoteListScreen(
+        modifier = modifier,
         state = state,
         onAction = viewModel::onAction,
         onNoteClick = onNoteClick,
@@ -44,6 +46,7 @@ fun NoteListScreenRoot(
 
 @Composable
 fun NoteListScreen(
+    modifier: Modifier = Modifier,
     state: NoteListState,
     lazyGridState: LazyGridState,
     onAction: (NoteListAction) -> Unit,
@@ -53,7 +56,7 @@ fun NoteListScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         floatingActionButton = {
             NoteListFAB(
                 onClick = {

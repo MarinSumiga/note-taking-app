@@ -15,6 +15,7 @@ import androidx.compose.ui.window.Dialog
 
 @Composable
 fun PermissionDialog (
+    modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
     onGrantPermission: () -> Unit,
     text:String
@@ -23,7 +24,7 @@ fun PermissionDialog (
         onDismissRequest = onDismiss
     ) {
         Card(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .height(200.dp)
                 .padding(16.dp),

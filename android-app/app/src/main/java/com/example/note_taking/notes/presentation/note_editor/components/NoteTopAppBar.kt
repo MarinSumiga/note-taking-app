@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteTopAppBar(
+    modifier: Modifier = Modifier,
     topAppBarTitle: String,
     navigationIcon: ImageVector,
     onBackClick: () -> Unit,
@@ -30,11 +31,13 @@ fun NoteTopAppBar(
     isSavingEnabled: Boolean
 ) {
     TopAppBar(
+        modifier = modifier,
         title = {
             TextField(
                 value = topAppBarTitle,
                 onValueChange = onTitleChange,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 enabled = isEditingEnabled,
                 singleLine = true,
                 placeholder = {

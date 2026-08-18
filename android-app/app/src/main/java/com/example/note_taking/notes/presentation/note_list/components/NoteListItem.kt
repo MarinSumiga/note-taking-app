@@ -1,9 +1,11 @@
 package com.example.note_taking.notes.presentation.note_list.components
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
+
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,11 +13,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,69 +27,74 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.note_taking.notes.domain.Note
-import com.example.note_taking.ui.theme.BrighBrown
 
 @Composable
-fun NoteListItem (
+fun NoteListItem(
+    modifier: Modifier=Modifier,
     note: Note,
     onClick: () -> Unit,
     onNoteFavoriteClick: (String) -> Unit,
     onNoteDeleteClick: (String) -> Unit
-){
-
-    Surface(
-        shape = RoundedCornerShape(24.dp),
-        modifier = Modifier
-            .clickable (
-                onClick = onClick
-            ),
-        color = BrighBrown.copy(0.3f),
-        border = BorderStroke(1.dp, Color.Black)
-    ){
-        Box(
-            modifier = Modifier,
-        ){
-            Column (
-                modifier = Modifier
-                    .padding(12.dp)
-                    .height(128.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = note.title,
-                    color = Color.Black,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                HorizontalDivider(
-                    color = Color.Black,
-                    modifier = Modifier.padding(vertical = 4.dp),
-                    )
-                Text(
-                    maxLines = 3,
-                    text = note.content,
-                    color = Color.Black,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-
+) {
+    ElevatedCard(
+        modifier = modifier
+            .height(170.dp)
+            .padding(top = 4.dp),
+        onClick = onClick,
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8.dp
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = note.title,
+                color = Color.Black,
+                style = MaterialTheme.typography.titleMedium
+            )
+            HorizontalDivider(
+                color = Color.Black,
+                modifier = Modifier.padding(vertical = 4.dp),
+            )
+            Text(
+                maxLines = 3,
+                text = note.content,
+                color = Color.Black,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+                .height(128.dp),
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             IconButton(
-                onClick ={
+                onClick = {
                     onNoteFavoriteClick(note.id)
                 },
                 modifier = Modifier
-                    .align(Alignment.BottomStart)
                     .padding(4.dp),
-            ){
+            ) {
                 Icon(
-                    imageVector = if(note.isFavorite){
+                    imageVector = if (note.isFavorite) {
                         Icons.Filled.Star
-                    }else{
+                    } else {
                         Icons.Outlined.StarOutline
                     },
                     contentDescription = "Favorite",
-                    tint = if (note.isFavorite){
+                    tint = if (note.isFavorite) {
                         Color.Yellow
-                    }else{
+                    } else {
                         Color.Black
                     }
                 )
@@ -96,7 +105,6 @@ fun NoteListItem (
                     onNoteDeleteClick(note.id)
                 },
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
                     .padding(4.dp),
             ) {
                 Icon(
@@ -105,8 +113,8 @@ fun NoteListItem (
                     tint = Color.Black
                 )
             }
-
-
         }
+
     }
+
 }

@@ -10,9 +10,11 @@ import androidx.compose.ui.graphics.Color
 
 @Composable
 fun NoteListFAB(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ){
     FloatingActionButton(
+        modifier = modifier,
         onClick = onClick,
     ) {
         Icon(
