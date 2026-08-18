@@ -11,6 +11,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,6 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.note_taking.notes.presentation.note_editor.components.NoteEditorContentField
 import com.example.note_taking.notes.presentation.note_editor.components.NoteTopAppBar
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -26,17 +28,17 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun NoteEditorScreenRoot(
     editorMode: NoteEditorScreenMode,
-    onBack : () -> Unit,
-){
-    val viewModel : NoteEditorViewModel = koinViewModel {
+    onBack: () -> Unit,
+) {
+    val viewModel: NoteEditorViewModel = koinViewModel {
         parametersOf(editorMode)
     }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel) {
-        viewModel.effects.collect{ effect ->
-            when(effect){
+        viewModel.effects.collect { effect ->
+            when (effect) {
                 NoteEditorEffect.NavigateBack -> onBack()
             }
         }
@@ -51,15 +53,16 @@ fun NoteEditorScreenRoot(
         onAction = viewModel::onAction
     )
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteEditorScreen(
     state: NoteEditorState,
     onAction: (NoteEditorAction) -> Unit,
-){
-
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             NoteTopAppBar(
                 topAppBarTitle = state.note?.title.orEmpty(),
@@ -79,32 +82,24 @@ fun NoteEditorScreen(
                 isSavingEnabled = state.hasUnsavedChanges && !state.isSaving
             )
         }
-    ) {innerPadding->
-        when{
-            state.isLoading ->{
+    ) { innerPadding ->
+        when {
+            state.isLoading -> {
                 CircularProgressIndicator()
             }
-            state.errorMessage != null ->{
+
+            state.errorMessage != null -> {
                 Text(state.errorMessage)
             }
+
             else -> {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    OutlinedTextField(
-                        value = state.note?.content.orEmpty(),
-                        enabled = !state.isSaving,
-                        onValueChange = {
-                            onAction(NoteEditorAction.OnContentChange(it))
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth()
-                    )
-                }
+                NoteEditorContentField(
+                    value = state.note?.content.orEmpty(),
+                    onValueChange = {
+                        onAction(NoteEditorAction.OnContentChange(it))
+                    },
+                    modifier = Modifier.padding(innerPadding)
+                )
             }
         }
     }

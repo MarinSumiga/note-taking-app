@@ -28,7 +28,8 @@ class NoteEditorViewModel(
     private var saveJob: Job?=null
     private val _effects = Channel<NoteEditorEffect>()
     val effects = _effects.receiveAsFlow()
-    private var navigateBackAfterSave = false
+
+    private var shouldNavigateAfterSave = false
 
     init {
         if(mode is NoteEditorScreenMode.Edit){
@@ -50,7 +51,7 @@ class NoteEditorViewModel(
             }
             NoteEditorAction.OnBackClick -> {
                 if (state.value.hasUnsavedChanges) {
-                    navigateBackAfterSave = true
+                    shouldNavigateAfterSave = true
                     saveNote()
                 }else{
                     emitNavigateBack()
@@ -94,11 +95,12 @@ class NoteEditorViewModel(
             try {
                 repository.upsertNote(note)
                 mutate(NoteEditorMutation.SavingCompleted(note))
-                if (navigateBackAfterSave) {
-                    navigateBackAfterSave=false
-                    emitNavigateBack()
+                if (shouldNavigateAfterSave) {
+                    shouldNavigateAfterSave=false
+                    _effects.send(NoteEditorEffect.NavigateBack)
                 }
             } catch (error: Exception) {
+                shouldNavigateAfterSave = false
                 mutate(NoteEditorMutation.SavingFailed(error.message))
             }
         }
