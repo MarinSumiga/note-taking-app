@@ -1,4 +1,4 @@
-package com.example.note_taking.navigation
+package com.example.note_taking.app.navigation
 
 import androidx.navigation3.runtime.NavKey
 import com.example.note_taking.notes.presentation.note_editor.NoteEditorScreenMode

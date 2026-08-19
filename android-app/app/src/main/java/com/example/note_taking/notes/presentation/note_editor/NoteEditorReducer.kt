@@ -19,7 +19,7 @@ internal sealed interface NoteEditorMutation
     ): NoteEditorMutation
     data object LoadingStarted: NoteEditorMutation
     data class LoadingCompleted(
-        val note: Note
+        val note: Note?
     ): NoteEditorMutation
     data class LoadingFailed(
         val errorMessage: String?

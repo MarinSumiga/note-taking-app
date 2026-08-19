@@ -1,9 +1,9 @@
-package com.example.note_taking.di
+package com.example.note_taking.app.di
 
 import androidx.room.Room
 import com.example.note_taking.notes.data.local.NoteDatabase
-import com.example.note_taking.notes.data.network.NoteApi
-import com.example.note_taking.notes.data.network.createHttpClient
+import com.example.note_taking.notes.data.remote.RemoteDataSource
+import com.example.note_taking.notes.data.remote.createHttpClient
 import com.example.note_taking.notes.data.repository.NoteRepositoryImpl
 import com.example.note_taking.notes.domain.NoteRepository
 import com.example.note_taking.notes.presentation.note_editor.NoteEditorViewModel
@@ -13,6 +13,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import com.example.note_taking.notes.data.local.NoteDao
 import com.example.note_taking.notes.presentation.note_editor.NoteEditorScreenMode
+import io.ktor.client.engine.android.Android
 
 val appModule = module{
 
@@ -26,10 +27,10 @@ val appModule = module{
         )
     }
     single{
-        createHttpClient()
+        createHttpClient(engine = Android.create())
     }
     single{
-        NoteApi(get())
+        RemoteDataSource(get())
     }
     single<NoteRepository>{
         NoteRepositoryImpl(get())

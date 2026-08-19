@@ -1,4 +1,4 @@
-package com.example.note_taking.previews
+package com.example.note_taking.notes.presentation.previews
 
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.MaterialTheme
